@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="result"><h1>오늘의 당첨 번호는 : </h1></div>
+    <div id="ball1"></div>
+    <div id="bonus"><h2>보너스 번호는 : </h2></div>
+    <div id="ball2"></div>
+  <script>
+    const parents = Array(45).fill().map((e, i) => i + 1);
+
+    const shuffle = [];
+    while (parents.length > 0){
+        const random = Math.floor(Math.random() * parents.length);
+        const spliceArray = parents.splice(random, 1);
+        const value = spliceArray[0];
+        shuffle.push(value);
+    }
+    console.log(shuffle);
+
+    const winBall = shuffle.slice(0,6).sort((a,b) => a-b);
+    const bonusBall = shuffle.slice(6,7);
+
+    console.log(winBall, bonusBall);
+
+    const $result = document.querySelector('#result');
+    const $bonus = document.querySelector('#bonus');
+    const $ball1 = document.querySelector('#ball1');
+    const $ball2 = document.querySelector('#ball2');
+
+    ballColor = (winNumber, $ball) => {
+        if (winNumber < 11){
+            $ball.style.backgroundColor = 'yellow';
+            $ball.style.color = 'black';
+        } else if (winNumber < 21){
+            $ball.style.backgroundColor = 'blue';
+            $ball.style.color = 'white'; 
+        } else if (winNumber < 31){
+            $ball.style.backgroundColor = 'red';
+            $ball.style.color = 'black'; 
+        } else if (winNumber < 41){
+            $ball.style.backgroundColor = 'gray';
+            $ball.style.color = 'black'; 
+        } else if (winNumber < 46){
+            $ball.style.backgroundColor = 'white';
+            $ball.style.color = 'black'; 
+        }
+    }
+
+    lottoBall = (winNumber, $showScreen) => {
+        const $ball = document.createElement('div');
+        $ball.className = 'ball';
+        ballColor(winNumber, $ball);
+        $ball.textContent = winNumber;
+        $showScreen.append($ball);
+    };
+
+    for(let i = 0; i < 6; i++){
+        setTimeout(()=>{
+            lottoBall(winBall[i], $ball1);
+        }, (i + 1) *1000);
+    }
+
+    setTimeout(()=>{
+        lottoBall(bonusBall, $ball2);
+    }, 7000)
+  </script>  
+</body>
+</html>
